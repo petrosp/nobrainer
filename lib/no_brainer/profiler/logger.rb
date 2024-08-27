@@ -14,6 +14,9 @@ module NoBrainer
       private
 
       def build_message(env)
+        level = ::Logger::ERROR if env[:exception]
+        level ||= not_indexed(env) ? ::Logger::INFO : ::Logger::DEBUG
+
         msg_duration = (env[:duration] * 1000.0).round(1).to_s
         msg_duration = (' ' * [0, 6 - msg_duration.size].max) + msg_duration
         msg_duration = "[#{msg_duration}ms] "
@@ -32,7 +35,7 @@ module NoBrainer
           msg_duration = [query_color(env[:query_type]), msg_duration].join
           msg_db = ["\e[0;34m", msg_db, query_color(env[:query_type])].join if msg_db
           if msg_exception
-            exception_color = "\e[0;31m" if level == Logger::ERROR
+            exception_color = "\e[0;31m" if level == ::Logger::ERROR
             msg_exception = ["\e[0;39m", ' -- ', exception_color, msg_exception].compact.join
           end
           msg_last = "\e[0m"
