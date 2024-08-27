@@ -19,7 +19,8 @@ class NoBrainer::Railtie < Rails::Railtie
     # Not the cleanest behavior, but if ActiveRecord does it, why not.
     unless defined?(ActiveRecord)
       console = ActiveSupport::Logger.new(STDERR)
-      Rails.logger.extend ActiveSupport::Logger.broadcast(console)
+      ::ActiveSupport::BroadcastLogger.new(::Rails.logger, console)
+      # Rails.logger.extend ActiveSupport::Logger.broadcast(console)
     end
   end
 
