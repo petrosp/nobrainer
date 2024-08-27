@@ -19,7 +19,7 @@ module NoBrainer::Generators
       end
 
       def resolve_require_path(path)
-        $:.map { |dir| File.join(dir, path) }.detect { |f| File.exists?(f) }
+        $:.map { |dir| File.join(dir, path) }.detect { |f| File.exist?(f) }
       end
     end
 
